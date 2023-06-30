@@ -10,6 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
+		
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 	</head>
 	<body class="is-preload">
@@ -186,8 +187,104 @@
 					<div id="copyright">
 						<ul><li>&copy; 2023</li>
 					</div>
+					<button class="open-button" onclick="openForm()">Chat</button>
 
+					<div class="chat-popup" id="myForm">
+					  <form  class="form-container" >
+						<h1>Chat</h1>
+						<label for="msg"><b>Message</b></label>
+						<textarea placeholder="Type message.." id="msg" required></textarea>
+					
+						<button  class="btn" id="send" >Send</button>
+						<button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+					  </form>
+					</div>
+					
+					<script>
+					// const msg=document.getElementById("msg")
+					 const sendBtn=document.getElementById("send")
+					// const baseUrl='http://localhost:3000/'
+					var xhr=null;
+					// sendBtn.addEventListener('click',getInfo)
+					// async function getInfo(e){
+					// 	e.preventDefault()
+					// 	const res =await fetch(baseUrl+'info',
+					// 	{
+					// 		method:'GET'
+					// 	})
+					// 	console.log(res)
+					// 	const data =await res.json()
+					// 	msg.value= data.info
+					// }
+					// async function postInfo(){
+
+					// }
+
+					getXmlHttpRequestObject = function () {
+						if (!xhr) {
+							// Create a new XMLHttpRequest object 
+							xhr = new XMLHttpRequest();
+						}
+						return xhr;
+					};
+
+					sendBtn.addEventListener('click',getUsers)
+
+					function dataCallback() {
+
+						if (xhr.readyState == 4 && xhr.status == 200) {
+							console.log("User data received!");
+							//getDate();
+							// Set current data text
+							const dataDiv = document.getElementById('msg');
+							dataDiv.value = xhr.responseText;
+						}
+					}
+					function getUsers(event) {
+
+						event.preventDefault();
+
+						dataToSend=document.getElementById('msg').value;
+
+						if(!dataToSend){
+							console.log('data is empty');
+							return;	
+						}
+						console.log("Get users...");
+						xhr = getXmlHttpRequestObject();
+						xhr.onreadystatechange = dataCallback;
+						// asynchronous requests
+						xhr.open("POST", "https://pateldevansh1809.pythonanywhere.com/", true);
+						// Send the request over the network
+						xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+						// Send the request over the network
+						xhr.send(JSON.stringify({data:dataToSend}));
+					}
+
+					function openForm() {
+						
+					  document.getElementById("myForm").style.display = "block";
+					}
+				
+					
+					function closeForm() {
+					  document.getElementById("myForm").style.display = "none";
+					}
+
+					// function getDate() {
+					// 	date = new Date().toString();
+					// 	document.getElementById('msg').textContent
+					// 		= date;
+					// }
+					// (function () {
+					// 	getDate();
+					// })();
+					</script>
+
+
+			
 			</div>
+
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
